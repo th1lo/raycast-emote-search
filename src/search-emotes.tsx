@@ -1,44 +1,30 @@
 // Emote Search
 
-import * as React from "react";
-import { useState, useEffect } from "react";
-import { List, LocalStorage, Action, ActionPanel, Icon } from "@raycast/api";
-import {
-  fetchTrending as fetchBTTVTrending,
-  searchEmotes as searchBTTVEmotes,
-} from "./lib/bttvService";
-import {
-  fetchTrending as fetch7TVTrending,
-  searchEmotes as search7TVEmotes,
-} from "./lib/sevenTVService";
-import {
-  fetchTrending as fetchFFZTrending,
-  searchEmotes as searchFFZEmotes,
-} from "./lib/ffzService";
-import { getAllFavs } from "./lib/localEmotes";
-import {
-  copyEmote,
-  addToFavorites,
-  removeFromFavorites,
-  removeFromRecents,
-} from "./lib/emoteActions";
-import type { Emote } from "./types/emote";
+import * as React from 'react';
+import { useState, useEffect } from 'react';
+import { List, LocalStorage, Action, ActionPanel, Icon } from '@raycast/api';
+import { fetchTrending as fetchBTTVTrending, searchEmotes as searchBTTVEmotes } from './lib/bttvService';
+import { fetchTrending as fetch7TVTrending, searchEmotes as search7TVEmotes } from './lib/sevenTVService';
+import { fetchTrending as fetchFFZTrending, searchEmotes as searchFFZEmotes } from './lib/ffzService';
+import { getAllFavs } from './lib/localEmotes';
+import { copyEmote, addToFavorites, removeFromFavorites, removeFromRecents } from './lib/emoteActions';
+import type { Emote } from './types/emote';
 
-type EmoteSource = "bttv" | "ffz" | "7tv";
+type EmoteSource = 'bttv' | 'ffz' | '7tv';
 
 const EMOTE_SOURCES = [
-  { value: "bttv" as const, label: "BTTV", icon: "../assets/BTTV.png" },
-  { value: "ffz" as const, label: "FFZ", icon: "../assets/FFZ.png" },
-  { value: "7tv" as const, label: "7TV", icon: "../assets/7TV.png" },
+  { value: 'bttv' as const, label: 'BTTV', icon: '../assets/BTTV.png' },
+  { value: 'ffz' as const, label: 'FFZ', icon: '../assets/FFZ.png' },
+  { value: '7tv' as const, label: '7TV', icon: '../assets/7TV.png' },
 ];
 
-const RECENT_KEY = "recent-emotes";
+const RECENT_KEY = 'recent-emotes';
 
 export default function Command() {
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState('');
   const [emotes, setEmotes] = useState<Emote[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [source, setSource] = useState<EmoteSource>("bttv");
+  const [source, setSource] = useState<EmoteSource>('bttv');
   const [recent, setRecent] = useState<Emote[]>([]);
   const [favorites, setFavorites] = useState<Emote[]>([]);
   const [trending, setTrending] = useState<Emote[]>([]);
@@ -51,7 +37,7 @@ export default function Command() {
           id: string;
           url: string;
           name: string;
-          source: "bttv" | "ffz" | "7tv";
+          source: 'bttv' | 'ffz' | '7tv';
         }>;
         setRecent(parsed);
       }
@@ -126,8 +112,8 @@ export default function Command() {
           tooltip="Select Emote Source"
           storeValue={true}
           onChange={(newValue) => {
-            setSource(newValue as "bttv" | "ffz" | "7tv");
-            setSearchText("");
+            setSource(newValue as 'bttv' | 'ffz' | '7tv');
+            setSearchText('');
           }}
         >
           {EMOTE_SOURCES.map((s) => (
@@ -141,7 +127,7 @@ export default function Command() {
           {emotes.map((emote) => (
             <List.Item
               key={`search-${emote.source}-${emote.id}`}
-              title={emote.name || "Unknown Emote"}
+              title={emote.name || 'Unknown Emote'}
               icon={{ source: emote.url }}
               actions={
                 <ActionPanel>
@@ -149,21 +135,21 @@ export default function Command() {
                     icon={Icon.Clipboard}
                     title="Copy Emote"
                     onAction={() => copyEmote(emote, recent, setRecent)}
-                    shortcut={{ modifiers: ["cmd"], key: "return" }}
+                    shortcut={{ modifiers: ['cmd'], key: 'return' }}
                   />
                   <Action
                     icon={Icon.Star}
                     title={
                       favorites.some((f) => f.id === emote.id && f.source === emote.source)
-                        ? "Remove from Favorites"
-                        : "Add to Favorites"
+                        ? 'Remove from Favorites'
+                        : 'Add to Favorites'
                     }
                     onAction={() =>
                       favorites.some((f) => f.id === emote.id && f.source === emote.source)
                         ? removeFromFavorites(emote, setFavorites)
                         : addToFavorites(emote, setFavorites)
                     }
-                    shortcut={{ modifiers: ["cmd", "shift"], key: "f" }}
+                    shortcut={{ modifiers: ['cmd', 'shift'], key: 'f' }}
                   />
                 </ActionPanel>
               }
@@ -177,7 +163,7 @@ export default function Command() {
               {favorites.map((emote) => (
                 <List.Item
                   key={`fav-${emote.source}-${emote.id}`}
-                  title={emote.name || "Unknown Emote"}
+                  title={emote.name || 'Unknown Emote'}
                   icon={{ source: emote.url }}
                   actions={
                     <ActionPanel>
@@ -185,13 +171,13 @@ export default function Command() {
                         icon={Icon.Clipboard}
                         title="Copy Emote"
                         onAction={() => copyEmote(emote, recent, setRecent)}
-                        shortcut={{ modifiers: ["cmd"], key: "return" }}
+                        shortcut={{ modifiers: ['cmd'], key: 'return' }}
                       />
                       <Action
                         icon={Icon.Star}
                         title="Remove from Favorites"
                         onAction={() => removeFromFavorites(emote, setFavorites)}
-                        shortcut={{ modifiers: ["cmd", "shift"], key: "f" }}
+                        shortcut={{ modifiers: ['cmd', 'shift'], key: 'f' }}
                       />
                     </ActionPanel>
                   }
@@ -204,7 +190,7 @@ export default function Command() {
               {recent.map((emote) => (
                 <List.Item
                   key={`recent-${emote.source}-${emote.id}`}
-                  title={emote.name || "Unknown Emote"}
+                  title={emote.name || 'Unknown Emote'}
                   icon={{ source: emote.url }}
                   actions={
                     <ActionPanel>
@@ -212,27 +198,27 @@ export default function Command() {
                         icon={Icon.Clipboard}
                         title="Copy Emote"
                         onAction={() => copyEmote(emote, recent, setRecent)}
-                        shortcut={{ modifiers: ["cmd"], key: "return" }}
+                        shortcut={{ modifiers: ['cmd'], key: 'return' }}
                       />
                       <Action
                         icon={Icon.Star}
                         title={
                           favorites.some((f) => f.id === emote.id && f.source === emote.source)
-                            ? "Remove from Favorites"
-                            : "Add to Favorites"
+                            ? 'Remove from Favorites'
+                            : 'Add to Favorites'
                         }
                         onAction={() =>
                           favorites.some((f) => f.id === emote.id && f.source === emote.source)
                             ? removeFromFavorites(emote, setFavorites)
                             : addToFavorites(emote, setFavorites)
                         }
-                        shortcut={{ modifiers: ["cmd", "shift"], key: "f" }}
+                        shortcut={{ modifiers: ['cmd', 'shift'], key: 'f' }}
                       />
                       <Action
                         icon={Icon.Clock}
                         title="Remove from Recents"
                         onAction={() => removeFromRecents(emote, recent, setRecent)}
-                        shortcut={{ modifiers: ["ctrl", "shift"], key: "r" }}
+                        shortcut={{ modifiers: ['ctrl', 'shift'], key: 'r' }}
                       />
                     </ActionPanel>
                   }
@@ -244,7 +230,7 @@ export default function Command() {
             {trending.map((emote) => (
               <List.Item
                 key={`trending-${emote.source}-${emote.id}`}
-                title={emote.name || "Unknown Emote"}
+                title={emote.name || 'Unknown Emote'}
                 icon={{ source: emote.url }}
                 actions={
                   <ActionPanel>
@@ -252,21 +238,21 @@ export default function Command() {
                       icon={Icon.Clipboard}
                       title="Copy Emote"
                       onAction={() => copyEmote(emote, recent, setRecent)}
-                      shortcut={{ modifiers: ["cmd"], key: "return" }}
+                      shortcut={{ modifiers: ['cmd'], key: 'return' }}
                     />
                     <Action
                       icon={Icon.Star}
                       title={
                         favorites.some((f) => f.id === emote.id && f.source === emote.source)
-                          ? "Remove from Favorites"
-                          : "Add to Favorites"
+                          ? 'Remove from Favorites'
+                          : 'Add to Favorites'
                       }
                       onAction={() =>
                         favorites.some((f) => f.id === emote.id && f.source === emote.source)
                           ? removeFromFavorites(emote, setFavorites)
                           : addToFavorites(emote, setFavorites)
                       }
-                      shortcut={{ modifiers: ["cmd", "shift"], key: "f" }}
+                      shortcut={{ modifiers: ['cmd', 'shift'], key: 'f' }}
                     />
                   </ActionPanel>
                 }
@@ -282,19 +268,17 @@ export default function Command() {
 
 export async function fetchTrending(
   source: EmoteSource
-): Promise<{ id: string; url: string; name: string; source: "bttv" | "ffz" | "7tv" }[]> {
-  if (source === "bttv") return (await fetchBTTVTrending()).map((emote) => ({ ...emote, source }));
-  if (source === "7tv") return (await fetch7TVTrending()).map((emote) => ({ ...emote, source }));
+): Promise<{ id: string; url: string; name: string; source: 'bttv' | 'ffz' | '7tv' }[]> {
+  if (source === 'bttv') return (await fetchBTTVTrending()).map((emote) => ({ ...emote, source }));
+  if (source === '7tv') return (await fetch7TVTrending()).map((emote) => ({ ...emote, source }));
   return (await fetchFFZTrending()).map((emote) => ({ ...emote, source }));
 }
 
 export async function searchEmotes(
   source: EmoteSource,
   query: string
-): Promise<{ id: string; url: string; name: string; source: "bttv" | "ffz" | "7tv" }[]> {
-  if (source === "bttv")
-    return (await searchBTTVEmotes(query)).map((emote) => ({ ...emote, source }));
-  if (source === "7tv")
-    return (await search7TVEmotes(query)).map((emote) => ({ ...emote, source }));
+): Promise<{ id: string; url: string; name: string; source: 'bttv' | 'ffz' | '7tv' }[]> {
+  if (source === 'bttv') return (await searchBTTVEmotes(query)).map((emote) => ({ ...emote, source }));
+  if (source === '7tv') return (await search7TVEmotes(query)).map((emote) => ({ ...emote, source }));
   return (await searchFFZEmotes(query)).map((emote) => ({ ...emote, source }));
 }

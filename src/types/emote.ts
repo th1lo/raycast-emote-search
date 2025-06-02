@@ -1,4 +1,4 @@
-export type EmoteSource = "bttv" | "ffz" | "7tv";
+export type EmoteSource = 'bttv' | 'ffz' | '7tv';
 
 export interface Emote {
   id: string;

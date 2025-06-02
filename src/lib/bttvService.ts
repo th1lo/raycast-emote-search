@@ -1,9 +1,9 @@
-import fetch from "node-fetch";
-import type { Emote, BTTVEmote } from "../types/emote";
+import fetch from 'node-fetch';
+import type { Emote, BTTVEmote } from '../types/emote';
 
 export async function fetchTrending(): Promise<Emote[]> {
   try {
-    const response = await fetch("https://api.betterttv.net/3/emotes/shared/top");
+    const response = await fetch('https://api.betterttv.net/3/emotes/shared/top');
     if (!response.ok) {
       return [];
     }
@@ -14,7 +14,7 @@ export async function fetchTrending(): Promise<Emote[]> {
         .map((item: BTTVEmote) => ({
           id: item.emote?.id || item.id,
           url: `https://cdn.betterttv.net/emote/${item.emote?.id || item.id}/3x`,
-          name: item.emote?.code || item.code || "Unknown Emote",
+          name: item.emote?.code || item.code || 'Unknown Emote',
         }))
         .sort((a, b) => a.name.localeCompare(b.name));
     }
@@ -32,8 +32,8 @@ export async function searchEmotes(searchText: string): Promise<Emote[]> {
     const response = await fetch(
       `https://api.betterttv.net/3/emotes/shared/search?query=${encodeURIComponent(searchText)}&limit=100`,
       {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
       }
     );
     if (!response.ok) {

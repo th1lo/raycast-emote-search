@@ -13,12 +13,12 @@ type ExtensionPreferences = {}
 declare type Preferences = ExtensionPreferences
 
 declare namespace Preferences {
-  /** Preferences accessible in the `emote-search` command */
-  export type EmoteSearch = ExtensionPreferences & {}
+  /** Preferences accessible in the `search-emotes` command */
+  export type SearchEmotes = ExtensionPreferences & {}
 }
 
 declare namespace Arguments {
-  /** Arguments passed to the `emote-search` command */
-  export type EmoteSearch = {}
+  /** Arguments passed to the `search-emotes` command */
+  export type SearchEmotes = {}
 }
 

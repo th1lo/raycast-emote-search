@@ -1,11 +1,11 @@
-import fetch from "node-fetch";
-import type { Emote, SevenTVEmote, SevenTVResponse } from "../types/emote";
+import fetch from 'node-fetch';
+import type { Emote, SevenTVEmote, SevenTVResponse } from '../types/emote';
 
 export async function fetchTrending(): Promise<Emote[]> {
   try {
-    const response = await fetch("https://7tv.io/v3/gql", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+    const response = await fetch('https://7tv.io/v3/gql', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         query: `
           query TrendingEmotes {
@@ -23,14 +23,14 @@ export async function fetchTrending(): Promise<Emote[]> {
     const emoteItems = data?.data?.emotes?.items;
     if (Array.isArray(emoteItems)) {
       return emoteItems.map((item: SevenTVEmote) => {
-        let host = item.host?.url || "";
-        if (host && !host.startsWith("http")) {
-          host = `https://${host.replace(/^\/+/g, "")}`;
+        let host = item.host?.url || '';
+        if (host && !host.startsWith('http')) {
+          host = `https://${host.replace(/^\/+/g, '')}`;
         }
         return {
           id: item.id,
           url: item.animated ? `${host}/3x.gif` : `${host}/3x.webp`,
-          name: item.name || "Unknown Emote",
+          name: item.name || 'Unknown Emote',
         };
       });
     }
@@ -45,9 +45,9 @@ export async function searchEmotes(searchText: string): Promise<Emote[]> {
     return [];
   }
   try {
-    const response = await fetch("https://7tv.io/v3/gql", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+    const response = await fetch('https://7tv.io/v3/gql', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         query: `
           query SearchEmotes($query: String!) {
@@ -73,9 +73,9 @@ export async function searchEmotes(searchText: string): Promise<Emote[]> {
       return [];
     }
     return emoteItems.map((item: SevenTVEmote) => {
-      let host = item.host?.url || "";
-      if (host && !host.startsWith("http")) {
-        host = `https://${host.replace(/^\/+/g, "")}`;
+      let host = item.host?.url || '';
+      if (host && !host.startsWith('http')) {
+        host = `https://${host.replace(/^\/+/g, '')}`;
       }
       return {
         id: item.id,

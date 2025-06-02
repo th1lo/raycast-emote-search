@@ -1,6 +1,6 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
-  "name": "emote-search",
+  "name": "search-emotes",
   "title": "Emote Search",
   "description": "Search and copy emotes from BTTV, 7TV, and FFZ",
   "icon": "icon.png",
@@ -12,8 +12,9 @@
   "license": "MIT",
   "commands": [
     {
-      "name": "emote-search",
+      "name": "search-emotes",
       "title": "Search Emotes",
+      "subtitle": "Search emotes from BTTV, 7TV, and FFZ",
       "description": "Search and copy emotes from BTTV, 7TV, and FFZ",
       "mode": "view"
     }
